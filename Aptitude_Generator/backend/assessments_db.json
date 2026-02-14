@@ -1,0 +1,182 @@
+{
+    "assessments": [
+        {
+            "id": "f7c4548a-98b8-42c6-8bdf-835264737b5a",
+            "token": "0d6j7v2z1",
+            "job_title": "AI Specialist",
+            "emails": [
+                "harshdewangan1472@gmail.com"
+            ],
+            "questions": [
+                {
+                    "id": "Q1",
+                    "question": "What is the primary focus of the AI Agent Developer role at Botivate Services LLP?",
+                    "options": [
+                        "Developing web applications",
+                        "Designing and developing intelligent agents",
+                        "Managing database systems",
+                        "Creating network architectures"
+                    ],
+                    "answer": "Designing and developing intelligent agents"
+                },
+                {
+                    "id": "Q2",
+                    "question": "Which of the following machine learning frameworks is mentioned in the job description?",
+                    "options": [
+                        "Keras",
+                        "TensorFlow",
+                        "OpenCV",
+                        "NLTK"
+                    ],
+                    "answer": "TensorFlow"
+                },
+                {
+                    "id": "Q3",
+                    "question": "What is the preferred programming language for the AI Agent Developer role?",
+                    "options": [
+                        "Java",
+                        "Python",
+                        "C++",
+                        "JavaScript"
+                    ],
+                    "answer": "Python"
+                },
+                {
+                    "id": "Q4",
+                    "question": "What is the purpose of collaborating with cross-functional teams in the AI Agent Developer role?",
+                    "options": [
+                        "To develop new AI models",
+                        "To integrate AI agents with existing systems",
+                        "To test and debug AI models",
+                        "To participate in code reviews"
+                    ],
+                    "answer": "To integrate AI agents with existing systems"
+                },
+                {
+                    "id": "Q5",
+                    "question": "What is the benefit of working as an AI Agent Developer intern at Botivate Services LLP?",
+                    "options": [
+                        "Opportunity to work with a talented team of professionals",
+                        "High salary package",
+                        "Opportunity to work with latest hardware",
+                        "Opportunity to travel abroad"
+                    ],
+                    "answer": "Opportunity to work with a talented team of professionals"
+                },
+                {
+                    "id": "Q6",
+                    "question": "What is the role of code reviews in the AI Agent Developer role?",
+                    "options": [
+                        "To test and debug AI models",
+                        "To integrate AI agents with existing systems",
+                        "To participate in improving the overall quality of the codebase",
+                        "To develop new AI models"
+                    ],
+                    "answer": "To participate in improving the overall quality of the codebase"
+                },
+                {
+                    "id": "Q7",
+                    "question": "What is the required skill for the AI Agent Developer role?",
+                    "options": [
+                        "Strong foundation in computer science and programming concepts",
+                        "Experience with natural language processing",
+                        "Familiarity with cloud platforms",
+                        "Knowledge of database management systems"
+                    ],
+                    "answer": "Strong foundation in computer science and programming concepts"
+                },
+                {
+                    "id": "Q8",
+                    "question": "Which of the following is a preferred skill for the AI Agent Developer role?",
+                    "options": [
+                        "Experience with computer vision",
+                        "Familiarity with web development frameworks",
+                        "Knowledge of database management systems",
+                        "Experience with network security"
+                    ],
+                    "answer": "Experience with computer vision"
+                },
+                {
+                    "id": "Q9",
+                    "question": "What is the purpose of staying updated with industry trends in the AI Agent Developer role?",
+                    "options": [
+                        "To develop new AI models",
+                        "To integrate AI agents with existing systems",
+                        "To apply new techniques to improve AI agent development",
+                        "To test and debug AI models"
+                    ],
+                    "answer": "To apply new techniques to improve AI agent development"
+                },
+                {
+                    "id": "Q10",
+                    "question": "What is the tech stack mentioned in the job description?",
+                    "options": [
+                        "Python, TensorFlow, PyTorch, Scikit-learn",
+                        "Java, Apache Spark, Hadoop",
+                        "C++, OpenCV, NLTK",
+                        "JavaScript, React, Node.js"
+                    ],
+                    "answer": "Python, TensorFlow, PyTorch, Scikit-learn"
+                },
+                {
+                    "id": "Q11",
+                    "question": "If you have a model with high variance, which regularization technique would you use?",
+                    "options": [
+                        "L1 regularization",
+                        "L2 regularization",
+                        "Dropout",
+                        "Early stopping"
+                    ],
+                    "answer": "L2 regularization"
+                },
+                {
+                    "id": "Q12",
+                    "question": "What is the difference between supervised and unsupervised learning?",
+                    "options": [
+                        "Supervised learning is used for regression tasks, while unsupervised learning is used for classification tasks",
+                        "Supervised learning is used for classification tasks, while unsupervised learning is used for regression tasks",
+                        "Supervised learning is used when the data is labeled, while unsupervised learning is used when the data is unlabeled",
+                        "Supervised learning is used when the data is unlabeled, while unsupervised learning is used when the data is labeled"
+                    ],
+                    "answer": "Supervised learning is used when the data is labeled, while unsupervised learning is used when the data is unlabeled"
+                },
+                {
+                    "id": "Q13",
+                    "question": "What is the purpose of using PyTorch in the AI Agent Developer role?",
+                    "options": [
+                        "To develop web applications",
+                        "To design and implement agent architectures",
+                        "To develop and train AI models",
+                        "To manage database systems"
+                    ],
+                    "answer": "To develop and train AI models"
+                },
+                {
+                    "id": "Q14",
+                    "question": "If you have a dataset with missing values, what would you do?",
+                    "options": [
+                        "Remove the rows with missing values",
+                        "Replace the missing values with the mean of the column",
+                        "Replace the missing values with the median of the column",
+                        "All of the above"
+                    ],
+                    "answer": "All of the above"
+                },
+                {
+                    "id": "Q15",
+                    "question": "What is the difference between a parametric and non-parametric model?",
+                    "options": [
+                        "A parametric model is used when the data is normally distributed, while a non-parametric model is used when the data is not normally distributed",
+                        "A parametric model is used when the data is not normally distributed, while a non-parametric model is used when the data is normally distributed",
+                        "A parametric model is used when the data has a fixed number of parameters, while a non-parametric model is used when the data has an infinite number of parameters",
+                        "A parametric model is used when the data has an infinite number of parameters, while a non-parametric model is used when the data has a fixed number of parameters"
+                    ],
+                    "answer": "A parametric model is used when the data has a fixed number of parameters, while a non-parametric model is used when the data has an infinite number of parameters"
+                }
+            ],
+            "timestamp": 1770879244.9053164,
+            "status": "Sent"
+        }
+    ],
+    "submissions": []
+}

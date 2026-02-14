@@ -1,159 +1,113 @@
-# 🧬 Resurrection Screening Agent (v3.2)
-### *The Enterprise-Grade AI Hiring Assistant*
+# 🧬 Agentic ATS Scorer Suite (v4.0)
+
+### _The Intelligence-First Recruitment Ecosystem_
 
 [![Tech Stack](https://img.shields.io/badge/Backend-FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)]()
-[![AI Model](https://img.shields.io/badge/AI-Llama%203.3%20(70B)-blue?style=flat-square&logo=meta&logoColor=white)]()
+[![AI Model](<https://img.shields.io/badge/AI-Llama%203.3%20(70B)-blue?style=flat-square&logo=meta&logoColor=white>)]()
 [![Integration](https://img.shields.io/badge/Integration-Gmail_API-red?style=flat-square&logo=gmail&logoColor=white)]()
 [![Database](https://img.shields.io/badge/VectorDB-Chroma-orange?style=flat-square)]()
-[![Validation](https://img.shields.io/badge/Data-Pydantic-E92063?style=flat-square&logo=pydantic&logoColor=white)]()
 
 ---
 
 ## 🚀 Overview
-The **Resurrection Screening Agent** is a next-generation Resume ATS (Applicant Tracking System) that eliminates the manual "resume fatigue" problem. Unlike traditional keyword matchers, this system uses a **Hybrid Brain** approach:
-1.  **Semantic Intelligence:** Understands that "C++" and "Systems Programming" are related.
-2.  **Deep Source Integration:** Automatically fetches resumes from Gmail, even if they are buried inside forwarded emails (`.eml` attachments).
-3.  **Hiring Manager Persona:** Uses **Llama 3.3** to write detailed, human-like critiques for shortlisted candidates.
+
+The **Agentic ATS Scorer Suite** is a unified ecosystem designed to automate the complete recruitment lifecycle. It transitions from role definition to candidate performance analysis seamlessly.
+
+### 🍱 Module Breakdown
+
+#### 1. ✨ JD Generator (`/JD_Generator`)
+
+The entry point of the hiring funnel. It removes the guesswork from drafting role requirements.
+
+- **AI Engine**: Llama 3.3 (70B) via Groq.
+- **Inputs**: Company Name, Industry, Role Title, Experience Level, Work Mode, and **Salary (LPA)**.
+- **Features**: Generates ATS-optimized, professional JDs formatted with clear headers and bullet points.
+- **Output**: Structured markdown/text JD ready for posting or analysis.
+
+#### 2. 🧬 Resume Screening Agent (`/Backend` & `/Frontend`)
+
+The semantic core that finds the "Perfect Match" from thousands of applications.
+
+- **Semantic Matching**: Uses ChromaDB vector embeddings for context-aware screening.
+- **Hybrid Scoring**: Combines NLP for experience extraction, keyword matching, and visual formatting analysis.
+- **Integrations**: Direct Gmail API fetch to scan resumes straight from your inbox.
+- **Reporting**: Generates stratified report folders (Shortlisted, Not Selected, Rejected).
+
+#### 3. 🧠 Aptitude Generator (`/Aptitude_Generator`)
+
+The evaluation layer that verifies candidate claims.
+
+- **Contextual MCQs**: Reads the specific JD generated/provided and creates 25 highly relevant technical/aptitude questions.
+- **Automated Delivery**: Integrates SMTP to send personalized test invites to candidates.
+- **Smart Proctoring**: Includes an AI-monitored dashboard to track candidate browser behavior, score, and submission status.
+- **Analytics**: Tracking dashboard for HR to view candidate performance at a glance.
 
 ---
 
-## 🧠 System Architecture & Workflow
+## 🔄 End-to-End Workflow
 
-```mermaid
-graph TD
-    %% User Interaction
-    User([👤 Recruiter]) -->|1. Upload JD| UI[💻 Frontend Dashboard]
-    User -->|2a. Drag & Drop| UPLOAD[📂 Manual Files]
-    GM[📧 Gmail Account] -->|2b. Auto-Fetch| API_G[📨 Gmail API Service]
-    
-    UI -->|3. Trigger Analysis| API[⚡ FastAPI Backend]
-    UPLOAD & API_G -->|Stream Content| API
+Follow these steps to experience the full agentic recruitment journey:
 
-    %% Data Processing Pipeline
-    subgraph Ingestion Layer
-        API_G -->|Recursive Extract| PARSE[📄 Unified Parser]
-        UPLOAD --> PARSE
-        PARSE -->|Clean| NLP[🧹 Text Sanitizer]
-        NLP -->|Anonymize| PII[🛡️ PII Masking]
-    end
+1.  **Generate Role Context**: Launch the **JD Generator**. Input your requirements (including salary). AI generates a specialized JD.
+2.  **Screen Talent**: Launch the **Resume Screening Agent**. Use the newly generated JD to filter resumes from local storage or Gmail. Set a 'Top N' cutoff to find your elite candidates.
+3.  **Create Assessment**: Launch the **Aptitude Generator**. Paste your JD to generate 25 targeted multiple-choice questions.
+4.  **Invite Candidates**: Select the best questions, enter candidate emails, and send the professional assessment link.
+5.  **Evaluate & Hire**: Candidates take the AI-proctored test. Review the **Analytics Dashboard** to make final hiring decisions based on both resume score and test performance.
 
-    %% Intelligence Layer
-    subgraph Logic Core
-        PII -->|Vectorize| VEC[🧬 ChromaDB Embeddings]
-        VEC -->|Compare| SEM[📐 Semantic Similarity]
-        
-        NLP -->|Extract Keywords| KEY[🔑 Keyword Matcher]
-        
-        SEM & KEY -->|Compute| SCORE[🧮 Hybrid Score Engine]
-    end
+---
 
-    %% Decision Layer
-    subgraph Decision Funnel
-        SCORE -->|Check Constraints| RULES{⚠️ Hard Rules?}
-        RULES -->|Yes: >2 Pages / Corrupt| REJ_HARD[🔴 Hard Rejected]
-        
-        RULES -->|No| RANK[📊 Rank Candidates]
-        RANK -->|Top N Selection| CUTOFF{🏆 Is Top N?}
-        
-        CUTOFF -->|No| REJ_SOFT[🟡 Not Selected]
-        REJ_SOFT -->|Brief Reason| LLM_LITE[🤖 Llama 3.3 Lite]
-        
-        CUTOFF -->|Yes| SHORT[🟢 Shortlisted]
-        SHORT -->|Detailed Analysis| LLM_FULL[🧠 Llama 3.3 Pro]
-    end
+## 🖥️ System Setup & Execution
 
-    %% Output Layer
-    LLM_LITE & LLM_FULL & REJ_HARD -->|JSON Response| REPORT[📋 Structural Report]
-    REPORT -->|Render| DASH[📈 Interactive Results UI]
+### 1. Prerequisites
+
+- Python 3.10+
+- Groq API Key (Place in `.env` in root)
+- Gmail `credentials.json` (for Resume Screening)
+
+### 2. Parallel Execution (Recommended)
+
+You can run all backend services simultaneously using our optimized scripts:
+
+**For Windows (Batch File):**
+
+```powershell
+.\run_backends.bat
+```
+
+**Using Python Script:**
+
+```powershell
+python run_all_backends.py
+```
+
+### 3. Service Ports
+
+| Service                 | Module                   | Port   |
+| :---------------------- | :----------------------- | :----- |
+| **Recruitment Backend** | Resume Screening API     | `8000` |
+| **JD Generator API**    | Job Description Creation | `8001` |
+| **Aptitude API**        | Assessment & Proctoring  | `8002` |
+
+---
+
+## ⚙️ Directory Structure
+
+```text
+Agentic_ATS_Scorer/
+├── Aptitude_Generator/    # Assessment Engine (Port 8002)
+│   ├── backend/           # FastAPI Assessment Logic
+│   └── frontend/          # Proctoring & Question UI
+├── JD_Generator/          # Role Creation Engine (Port 8001)
+│   ├── backend/           # FastAPI JD AI Logic
+│   └── frontend/          # JD Creation Dashboard
+├── Backend/               # Resume Screening API (Port 8000)
+├── Frontend/              # Main ATS Dashboard
+├── run_all_backends.py    # Multi-service runner
+└── run_backends.bat       # Windows automation script
 ```
 
 ---
 
-## ✨ Key Features
+### _Refined. Automated. Agentic._
 
-### 1. **Deep Gmail Integration**
-*   **Recursive Parsing:** Smart enough to extract resumes from emails that are *attached* to other emails (handling nested `.eml` files from forwarding or job portals).
-*   **Inclusive Date Logic:** Precise date filtering (Start 00:00 to End 23:59:59) ensures you never miss a candidate.
-
-### 2. **Hybrid Scoring Engine**
-Candidates are evaluated on a weighted multi-dimensional scale:
-*   **Keywords (25%):** Hard skills match (e.g., Python, Docker).
-*   **Experience (20%):** Years of relevant experience vs JD requirements.
-*   **Education (10%):** Tier-1 degree verification.
-*   **Visuals (30%):** Formatting, whitespace, and presentation quality.
-*   **Semantic (15%):** Embedding similarity (Cos Sim) for "meaning" match.
-
-### 3. **Three-Tier Filtering Protocol**
-*   **🚫 Hard Rejected (Red):** Automatically blocked for violating constraints.
-*   **🟡 Not Selected (Yellow):** Valid candidates who scored lower than the "Top N". Saved to `Reports/Not_Selected_Resumes`.
-*   **🟢 Shortlisted (Green):** The "Cream of the Crop". Detailed AI analysis provided.
-
----
-
-## 🛠️ Installation & Setup
-
-### Prerequisites
-*   Python 3.10+
-*   Groq API Key (for LLM)
-*   Google Cloud Credentials (for Gmail)
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/Prabhat9801/Agentic_ATS_Scorer.git
-cd Agentic_ATS_Scorer
-```
-
-### 2. Set up Environment
-Create a `.env` file in the root directory:
-```ini
-GROQ_API_KEY=your_groq_api_key_here
-```
-
-### 2.1 Setup Gmail Credentials
-1.  Go to Google Cloud Console > Enable **Gmail API**.
-2.  Create OAuth 2.0 Credentials (Desktop App).
-3.  Download the JSON file, rename it to `credentials.json`, and place it in the **root directory**.
-
-### 3. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Run the System
-Start the Backend Server (FastAPI):
-```bash
-python -m uvicorn Backend.app.main:app --reload
-```
-*The server will start at `http://127.0.0.1:8000`*
-
-### 5. Launch UI
-Simply open `Frontend/index.html` in your browser. No build step required!
-
----
-
-## 🖥️ Usage Guide
-
-1.  **Input JD:** Paste the Job Description text OR drop a PDF file.
-2.  **Add Candidates:**
-    *   **Option A:** Drag & drop files manually.
-    *   **Option B (New):** Check "Include Gmail Resumes" and select a Date Range.
-    *   *Note: Date range is inclusive (Start 00:00 to End 23:59:59).*
-3.  **Set Cutoff:** Choose how many candidates you want to shortlist (e.g., Top 5).
-4.  **Analyze:** Click "Run Analysis".
-    *   *System searches inbox -> Extracts PDFs -> Parses -> Scores -> Reports.*
-5.  **Review:**
-    *   **Recommendation Tab:** See AI feedback.
-    *   **Reports Folder:** Check `Reports/` on disk for organized folders:
-        *   `Shortlisted_Resumes`
-        *   `Not_Selected_Resumes`
-        *   `Rejected_Resumes`
-
----
-
-## 📜 License
-MIT License. Open source for educational and enterprise use.
-
----
-
-### *Refined. Resurrected. Ready to Hire.*
-**Built with ❤️ for High-Volume Recruitment**
+**Built with ❤️ for Modern Talent Teams**

@@ -1,0 +1,489 @@
+{
+    "assessments": [
+        {
+            "id": "b6935ebf-3a3e-4379-8c75-06b281d3e64d",
+            "token": "njvlalozq",
+            "job_title": "AI Specialist",
+            "emails": [
+                "harshdewangan1472@gmail.com"
+            ],
+            "questions": [
+                {
+                    "id": "Q1",
+                    "question": "What is the primary focus of the AI Agent Developer role at Botivate Services LLP?",
+                    "options": [
+                        "Developing web applications",
+                        "Designing and developing intelligent agents",
+                        "Managing databases",
+                        "Building network architectures"
+                    ],
+                    "answer": "Designing and developing intelligent agents"
+                },
+                {
+                    "id": "Q3",
+                    "question": "What is the preferred programming language for the AI Agent Developer role?",
+                    "options": [
+                        "Java",
+                        "Python",
+                        "C++",
+                        "JavaScript"
+                    ],
+                    "answer": "Python"
+                },
+                {
+                    "id": "Q2",
+                    "question": "Which of the following machine learning frameworks is mentioned in the job description?",
+                    "options": [
+                        "Keras",
+                        "TensorFlow",
+                        "OpenCV",
+                        "NLTK"
+                    ],
+                    "answer": "TensorFlow"
+                },
+                {
+                    "id": "Q4",
+                    "question": "What is the benefit of working with a talented team of professionals at Botivate Services LLP?",
+                    "options": [
+                        "Higher salary",
+                        "Opportunity to work with a talented team of professionals",
+                        "Flexible working hours",
+                        "Free meals"
+                    ],
+                    "answer": "Opportunity to work with a talented team of professionals"
+                },
+                {
+                    "id": "Q5",
+                    "question": "What is the role of an AI Agent Developer in terms of code quality?",
+                    "options": [
+                        "Only writing new code",
+                        "Only reviewing existing code",
+                        "Participating in code reviews and contributing to improving the overall quality of the codebase",
+                        "Ignoring code quality"
+                    ],
+                    "answer": "Participating in code reviews and contributing to improving the overall quality of the codebase"
+                },
+                {
+                    "id": "Q6",
+                    "question": "Which of the following is a key responsibility of the AI Agent Developer role?",
+                    "options": [
+                        "Testing and debugging web applications",
+                        "Developing and training AI models using machine learning algorithms",
+                        "Managing network architectures",
+                        "Designing databases"
+                    ],
+                    "answer": "Developing and training AI models using machine learning algorithms"
+                },
+                {
+                    "id": "Q7",
+                    "question": "What is the ideal candidate profile for the AI Agent Developer role?",
+                    "options": [
+                        "Experienced professionals with 5+ years of experience",
+                        "Freshers looking to kick-start their career in AI development",
+                        "Candidates with a background in marketing",
+                        "Candidates with a background in finance"
+                    ],
+                    "answer": "Freshers looking to kick-start their career in AI development"
+                },
+                {
+                    "id": "Q8",
+                    "question": "Which of the following is a preferred skill for the AI Agent Developer role?",
+                    "options": [
+                        "Experience with natural language processing or computer vision",
+                        "Experience with web development",
+                        "Experience with database management",
+                        "Experience with network administration"
+                    ],
+                    "answer": "Experience with natural language processing or computer vision"
+                },
+                {
+                    "id": "Q9",
+                    "question": "How often should an AI Agent Developer stay updated with industry trends?",
+                    "options": [
+                        "Daily",
+                        "Weekly",
+                        "Monthly",
+                        "Never"
+                    ],
+                    "answer": "Never"
+                },
+                {
+                    "id": "Q10",
+                    "question": "What is the primary goal of testing and debugging AI models?",
+                    "options": [
+                        "To ensure optimal performance",
+                        "To reduce development time",
+                        "To increase costs",
+                        "To decrease quality"
+                    ],
+                    "answer": "To ensure optimal performance"
+                }
+            ],
+            "timestamp": 1770882088.441018,
+            "status": "Sent"
+        },
+        {
+            "id": "df4f1515-03c7-408d-b04f-862a16a50488",
+            "token": "yfsm9ep4l",
+            "job_title": "AI Specialist",
+            "emails": [
+                "harshdewangan1472@gmail.com"
+            ],
+            "questions": [
+                {
+                    "id": "Q1",
+                    "question": "What is the primary role of a Backend Developer in a software development team?",
+                    "options": [
+                        "To design and develop user interfaces",
+                        "To design and develop backend systems",
+                        "To manage databases and storage",
+                        "To handle network security and infrastructure"
+                    ],
+                    "answer": "To design and develop backend systems"
+                },
+                {
+                    "id": "Q2",
+                    "question": "What is the purpose of API design and development in backend systems?",
+                    "options": [
+                        "To manage user authentication and authorization",
+                        "To integrate frontend and backend systems",
+                        "To handle database queries and transactions",
+                        "To configure server and network settings"
+                    ],
+                    "answer": "To integrate frontend and backend systems"
+                },
+                {
+                    "id": "Q3",
+                    "question": "Which of the following programming languages is commonly used for backend development?",
+                    "options": [
+                        "JavaScript",
+                        "Python",
+                        "Java",
+                        "All of the above"
+                    ],
+                    "answer": "All of the above"
+                },
+                {
+                    "id": "Q4",
+                    "question": "What is the benefit of using containerization in backend development?",
+                    "options": [
+                        "Improved security and authentication",
+                        "Increased scalability and flexibility",
+                        "Enhanced database performance",
+                        "Reduced network latency"
+                    ],
+                    "answer": "Increased scalability and flexibility"
+                },
+                {
+                    "id": "Q5",
+                    "question": "What is the purpose of code reviews in a software development team?",
+                    "options": [
+                        "To identify and fix bugs and errors",
+                        "To improve code quality and maintainability",
+                        "To optimize database queries and performance",
+                        "To manage project timelines and deadlines"
+                    ],
+                    "answer": "To improve code quality and maintainability"
+                },
+                {
+                    "id": "Q6",
+                    "question": "Which of the following frameworks is commonly used for backend development with Java?",
+                    "options": [
+                        "Django",
+                        "Spring",
+                        "Node.js",
+                        "React"
+                    ],
+                    "answer": "Spring"
+                },
+                {
+                    "id": "Q7",
+                    "question": "What is the difference between monolithic and microservices architecture in backend development?",
+                    "options": [
+                        "Monolithic is more scalable, while microservices is more complex",
+                        "Monolithic is more secure, while microservices is more flexible",
+                        "Monolithic is a single, self-contained unit, while microservices is a collection of independent services",
+                        "Monolithic is used for frontend development, while microservices is used for backend development"
+                    ],
+                    "answer": "Monolithic is a single, self-contained unit, while microservices is a collection of independent services"
+                },
+                {
+                    "id": "Q8",
+                    "question": "Which of the following databases is a popular choice for backend development?",
+                    "options": [
+                        "MySQL",
+                        "MongoDB",
+                        "PostgreSQL",
+                        "All of the above"
+                    ],
+                    "answer": "All of the above"
+                },
+                {
+                    "id": "Q9",
+                    "question": "What is the purpose of CI/CD pipelines in backend development?",
+                    "options": [
+                        "To automate testing and deployment",
+                        "To manage database schema and migrations",
+                        "To handle user authentication and authorization",
+                        "To configure server and network settings"
+                    ],
+                    "answer": "To automate testing and deployment"
+                },
+                {
+                    "id": "Q10",
+                    "question": "Which of the following is a benefit of using agile development methodologies in backend development?",
+                    "options": [
+                        "Improved predictability and planning",
+                        "Increased flexibility and adaptability",
+                        "Enhanced security and compliance",
+                        "Reduced costs and resources"
+                    ],
+                    "answer": "Increased flexibility and adaptability"
+                }
+            ],
+            "timestamp": 1770892042.7120118,
+            "status": "Sent"
+        },
+        {
+            "id": "28e0be5d-cc75-43ca-99a6-71353792c919",
+            "token": "gxnvq2215",
+            "job_title": "AI Specialist",
+            "emails": [
+                "harshdewangan1472@gmail.com"
+            ],
+            "questions": [
+                {
+                    "id": "Q1",
+                    "question": "What is the primary role of a Backend Developer in the given job description?",
+                    "options": [
+                        "To design and develop frontend systems",
+                        "To design and develop high-quality backend systems",
+                        "To manage database systems",
+                        "To test and deploy applications"
+                    ],
+                    "answer": "To design and develop high-quality backend systems"
+                },
+                {
+                    "id": "Q2",
+                    "question": "Which of the following programming languages is NOT mentioned in the job description?",
+                    "options": [
+                        "Java",
+                        "Python",
+                        "JavaScript",
+                        "C++"
+                    ],
+                    "answer": "C++"
+                },
+                {
+                    "id": "Q3",
+                    "question": "What is the purpose of collaborating with frontend developers in the given job description?",
+                    "options": [
+                        "To integrate frontend systems",
+                        "To integrate backend APIs",
+                        "To manage database systems",
+                        "To test and deploy applications"
+                    ],
+                    "answer": "To integrate backend APIs"
+                },
+                {
+                    "id": "Q4",
+                    "question": "What is the benefit of participating in code reviews according to the job description?",
+                    "options": [
+                        "To improve the codebase",
+                        "To manage database systems",
+                        "To test and deploy applications",
+                        "To integrate backend APIs"
+                    ],
+                    "answer": "To improve the codebase"
+                }
+            ],
+            "timestamp": 1770892199.9348407,
+            "status": "Sent"
+        },
+        {
+            "id": "795b532c-7a21-414b-b4d9-355c535fac29",
+            "token": "yk57ggv1s",
+            "job_title": "Backend Developer (2-4 Years)",
+            "emails": [
+                "harshdewangan1472@gmail.com"
+            ],
+            "questions": [
+                {
+                    "id": "Q1",
+                    "question": "What is the primary responsibility of a Backend Developer at Botivate?",
+                    "options": [
+                        "Designing user interfaces",
+                        "Developing and maintaining high-performance backend systems",
+                        "Managing databases",
+                        "Troubleshooting network issues"
+                    ],
+                    "answer": "Developing and maintaining high-performance backend systems"
+                },
+                {
+                    "id": "Q2",
+                    "question": "Which programming languages are mentioned in the job description as part of the tech stack?",
+                    "options": [
+                        "Java and C++",
+                        "Python and JavaScript",
+                        "Java or Python",
+                        "C# and Ruby"
+                    ],
+                    "answer": "Java or Python"
+                },
+                {
+                    "id": "Q3",
+                    "question": "What is the purpose of collaborating with cross-functional teams in the context of the Backend Developer role?",
+                    "options": [
+                        "To identify and prioritize project requirements",
+                        "To design and implement APIs",
+                        "To troubleshoot technical issues",
+                        "To participate in code reviews"
+                    ],
+                    "answer": "To identify and prioritize project requirements"
+                }
+            ],
+            "timestamp": 1770892940.7796006,
+            "status": "Sent"
+        },
+        {
+            "id": "c0c32971-f25d-4b9e-9f92-d52a07fe8102",
+            "token": "ge9hg6rdn",
+            "job_title": "Android Developer (2-4 Years)",
+            "emails": [
+                "harshdewangan1472@gmail.com",
+                "khushbudewangan139@gmail.com"
+            ],
+            "questions": [
+                {
+                    "id": "Q1",
+                    "question": "What is the primary programming language used for Android app development?",
+                    "options": [
+                        "Java",
+                        "Kotlin",
+                        "Both Java and Kotlin",
+                        "C++"
+                    ],
+                    "answer": "Both Java and Kotlin"
+                },
+                {
+                    "id": "Q2",
+                    "question": "Which of the following is a key responsibility of an Android Developer at Botivate Services LLP?",
+                    "options": [
+                        "Developing web applications",
+                        "Developing high-quality, scalable Android applications",
+                        "Designing user interfaces for desktop applications",
+                        "Managing cloud-based services"
+                    ],
+                    "answer": "Developing high-quality, scalable Android applications"
+                },
+                {
+                    "id": "Q3",
+                    "question": "What is the purpose of a code review in the context of Android app development?",
+                    "options": [
+                        "To identify and fix bugs in the code",
+                        "To improve the codebase and ensure it follows best practices",
+                        "To test the application on different devices",
+                        "To deploy the application on the Google Play Store"
+                    ],
+                    "answer": "To improve the codebase and ensure it follows best practices"
+                },
+                {
+                    "id": "Q4",
+                    "question": "Which of the following tools is used for building and managing Android projects?",
+                    "options": [
+                        "Android SDK",
+                        "Android Studio",
+                        "Gradle",
+                        "Eclipse"
+                    ],
+                    "answer": "Gradle"
+                },
+                {
+                    "id": "Q5",
+                    "question": "What is the name of the development environment used for Android app development?",
+                    "options": [
+                        "Android SDK",
+                        "Android Studio",
+                        "Eclipse",
+                        "Visual Studio"
+                    ],
+                    "answer": "Android Studio"
+                },
+                {
+                    "id": "Q6",
+                    "question": "What is the benefit of using agile development methodologies in Android app development?",
+                    "options": [
+                        "It allows for a more rigid and structured approach to development",
+                        "It enables faster time-to-market and more flexibility",
+                        "It requires more documentation and planning",
+                        "It is only suitable for small projects"
+                    ],
+                    "answer": "It enables faster time-to-market and more flexibility"
+                },
+                {
+                    "id": "Q7",
+                    "question": "Which of the following is a preferred skill for an Android Developer at Botivate Services LLP?",
+                    "options": [
+                        "Experience with machine learning",
+                        "Knowledge of cloud-based services and integrations",
+                        "Experience with game development",
+                        "Knowledge of web development frameworks"
+                    ],
+                    "answer": "Knowledge of cloud-based services and integrations"
+                },
+                {
+                    "id": "Q8",
+                    "question": "What is the purpose of staying up-to-date with industry trends and emerging technologies as an Android Developer?",
+                    "options": [
+                        "To stay ahead of the competition and identify new opportunities",
+                        "To learn new programming languages",
+                        "To attend conferences and meet other developers",
+                        "To read books and articles on Android development"
+                    ],
+                    "answer": "To stay ahead of the competition and identify new opportunities"
+                },
+                {
+                    "id": "Q9",
+                    "question": "Which of the following is a key aspect of designing and implementing user interfaces for Android applications?",
+                    "options": [
+                        "Ensuring the interface is compatible with all screen sizes and devices",
+                        "Using a consistent design language throughout the application",
+                        "Optimizing the interface for performance and battery life",
+                        "All of the above"
+                    ],
+                    "answer": "All of the above"
+                },
+                {
+                    "id": "Q10",
+                    "question": "What is the role of APIs in Android app development?",
+                    "options": [
+                        "To provide a user interface for the application",
+                        "To store and manage data locally on the device",
+                        "To interact with remote services and retrieve data",
+                        "To implement security and authentication mechanisms"
+                    ],
+                    "answer": "To interact with remote services and retrieve data"
+                }
+            ],
+            "timestamp": 1770962677.1937685,
+            "status": "Sent"
+        }
+    ],
+    "submissions": [
+        {
+            "token": "njvlalozq",
+            "email": "harshdewangan1472@gmail.com",
+            "score": 5,
+            "total": 10,
+            "timestamp": 1770882392.174723
+        },
+        {
+            "token": "yfsm9ep4l",
+            "email": "harshdewangan1472@gmail.com",
+            "score": 0,
+            "total": 10,
+            "timestamp": 1770892129.5552738,
+            "suspicious": "Unwanted Move"
+        }
+    ]
+}

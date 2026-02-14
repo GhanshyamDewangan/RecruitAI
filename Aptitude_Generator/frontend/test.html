@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecruitAI | Assessment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <style>
+        :root {
+            --primary: hsl(245, 100%, 65%);
+            --bg-light: hsl(220, 40%, 98%);
+            --text-main: hsl(220, 20%, 15%);
+            --radius-lg: 24px;
+        }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg-light); color: var(--text-main); margin: 0; padding: 40px 20px; }
+        .test-container { max-width: 800px; margin: 0 auto; background: white; padding: 50px; border-radius: var(--radius-lg); box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
+        .test-header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #f0f0f0; padding-bottom: 30px; }
+        .test-header h1 { font-weight: 800; color: var(--primary); margin: 0; }
+        .instructions { font-size: 0.95rem; color: #666; margin-top: 15px; }
+        
+        .question-block { margin-bottom: 40px; }
+        .q-text { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; }
+        .options-list { display: grid; gap: 12px; }
+        .option-item {
+            display: flex; align-items: center; gap: 15px; padding: 15px;
+            border: 2px solid #f0f0f0; border-radius: 12px; cursor: pointer; transition: 0.3s;
+        }
+        .option-item:hover { border-color: var(--primary); background: rgba(124, 58, 237, 0.02); }
+        .option-item.selected { border-color: var(--primary); background: rgba(124, 58, 237, 0.05); }
+        
+        .radio-circle { width: 20px; height: 20px; border: 2px solid #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .option-item.selected .radio-circle { border-color: var(--primary); }
+        .option-item.selected .radio-circle::after { content: ''; width: 10px; height: 10px; background: var(--primary); border-radius: 50%; }
+        
+        .submit-footer { text-align: center; margin-top: 50px; }
+        .submit-btn {
+            background: var(--text-main); color: white; padding: 18px 60px;
+            border-radius: 40px; border: none; font-weight: 700; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s;
+        }
+        .submit-btn:hover { background: var(--primary); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3); }
+        
+        .question-counter { text-align: right; font-weight: 600; color: var(--primary); margin-bottom: 20px; font-size: 0.9rem; }
+        .question-block { margin-bottom: 40px; display: none; }
+        .question-block.active { display: block; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .nav-footer { margin-top: 50px; display: flex; justify-content: space-between; gap: 20px; border-top: 2px solid #f0f0f0; padding-top: 30px; }
+        .nav-btn {
+            background: white; color: var(--text-main); padding: 12px 30px;
+            border-radius: 12px; border: 2px solid #f0f0f0; font-weight: 600;
+            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px;
+        }
+        .nav-btn:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); background: rgba(124, 58, 237, 0.02); }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .nav-btn.primary { background: var(--primary); border-color: var(--primary); color: white; }
+        .nav-btn.primary:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2); }
+
+        .hidden { display: none !important; }
+        .success-view { text-align: center; padding: 50px 0; }
+        .success-icon { color: #10b981; margin-bottom: 25px; }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+        }
+        .modal-content.glass {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px; border-radius: 20px; width: 90%; max-width: 400px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h3 { margin: 0; color: var(--primary); }
+        .close-modal { background: none; border: none; cursor: pointer; color: #999; }
+        .glass-inset {
+            width: 100%; padding: 12px; border: 2px solid #eee;
+            border-radius: 10px; font-family: inherit; font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+        .glass-btn.sm, .primary-btn.sm {
+            padding: 10px 20px; border-radius: 10px; border: none;
+            font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .glass-btn.sm { background: #eee; color: #666; }
+        .primary-btn.sm { background: var(--primary); color: white; }
+        .primary-btn.sm:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* Proctoring Styles */
+        .camera-preview {
+            position: fixed; bottom: 20px; right: 20px; width: 150px; height: 110px;
+            background: #000; border-radius: 12px; border: 3px solid var(--primary);
+            overflow: hidden; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: scaleX(-1); /* Mirror effect */
+        }
+        #monitor-video { width: 100%; height: 100%; object-fit: cover; }
+        .proctoring-badge {
+            position: absolute; top: 10px; left: 10px; background: rgba(255,0,0,0.8);
+            color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px;
+            font-weight: 800; transform: scaleX(-1);
+        }
+
+        .warning-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(239, 68, 68, 0.95); backdrop-filter: blur(10px);
+            z-index: 3000; display: none; align-items: center; justify-content: center;
+            color: white; text-align: center; padding: 20px;
+        }
+        .warning-content h2 { font-size: 2.5rem; margin-bottom: 20px; }
+        .warning-content p { font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body { padding: 20px 10px; }
+            .test-container { padding: 30px 20px; }
+            .test-header h1 { font-size: 1.5rem; }
+            .q-text { font-size: 1rem; }
+            .option-item { padding: 12px; gap: 10px; font-size: 0.9rem; }
+            .submit-btn { width: 100%; padding: 15px; font-size: 1rem; }
+            .modal-content.glass { padding: 20px; width: 95%; }
+            .camera-preview { width: 100px; height: 80px; bottom: 10px; right: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="camera-preview">
+        <video id="monitor-video" autoplay playsinline muted></video>
+        <div class="proctoring-badge">LIVE MONITORING</div>
+    </div>
+
+    <div id="warning-screen" class="warning-overlay">
+        <div class="warning-content">
+            <i data-lucide="alert-triangle" style="width: 80px; height: 80px; margin-bottom: 20px;"></i>
+            <h2>WARNING: TAB SWITCH DETECTED</h2>
+            <p>Switching tabs or windows is strictly prohibited during the assessment.<br>This incident has been logged and reported to the recruiter.</p>
+            <button class="nav-btn primary" style="background: white; color: #ef4444;" onclick="resumeTest()">I Understand, Back to Test</button>
+        </div>
+    </div>
+    <div class="test-container" id="test-view">
+        <div class="test-header">
+            <i data-lucide="award" style="width: 48px; height: 48px; color: var(--primary); margin-bottom: 10px;"></i>
+            <h1>Technical Assessment</h1>
+            <p class="instructions">Please select the most appropriate answer for each question.</p>
+        </div>
+
+        <div id="quiz-ui" class="hidden">
+            <div id="question-progress" class="question-counter">Question 1 of 0</div>
+            
+            <form id="assessment-form">
+                <div id="questions-container">
+                    <!-- Single Question will be active here -->
+                </div>
+
+                <div class="nav-footer">
+                    <button type="button" class="nav-btn" id="prev-btn" onclick="goToPrev()">
+                        <i data-lucide="arrow-left"></i> <span>Back</span>
+                    </button>
+                    <button type="button" class="nav-btn primary" id="next-btn" onclick="goToNext()">
+                        <span>Next</span> <i data-lucide="arrow-right"></i>
+                    </button>
+                    <button type="button" class="nav-btn primary hidden" id="final-submit-btn" onclick="handleSubmit()">
+                        <span>Submit Assessment</span> <i data-lucide="check-circle"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <div id="loading-questions" style="text-align: center; padding: 40px;">
+            <p>Loading assessment...</p>
+        </div>
+    </div>
+
+    <div class="test-container hidden" id="success-view">
+        <div class="success-view">
+            <i data-lucide="check-circle" class="success-icon" style="width: 80px; height: 80px;"></i>
+            <h2>Assessment Submitted Successfully!</h2>
+            <p>Thank you for taking the time to complete the test. Our hiring team will review your responses and get back to you shortly.</p>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const container = document.getElementById('questions-container');
+        const progressText = document.getElementById('question-progress');
+        const quizUI = document.getElementById('quiz-ui');
+        const loader = document.getElementById('loading-questions');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('final-submit-btn');
+
+        let questionsData = [];
+        let currentIdx = 0;
+        let cheated = false;
+        let suspiciousActivity = false;
+
+        async function initTest() {
+            if (!token) {
+                container.innerHTML = `<p style="text-align:center; padding:50px; color:red;">Invalid or missing assessment token.</p>`;
+                return;
+            }
+
+            // Step 1: Load Questions Immediately
+            try {
+                const response = await fetch(`http://127.0.0.1:8002/get-assessment/${token}`);
+                if (!response.ok) throw new Error("Could not load assessment");
+                
+                const data = await response.json();
+                questionsData = data.questions;
+                
+                document.querySelector('h1').textContent = `${data.job_title} Assessment`;
+                
+                // Show Quiz UI and hide loader early
+                loader.classList.add('hidden');
+                quizUI.classList.remove('hidden');
+                renderQuestionsNodes();
+                updateQuizView();
+            } catch (error) {
+                loader.innerHTML = `<p style="text-align:center; color:red;">${error.message}</p>`;
+                return;
+            }
+
+            // Step 2: Start Proctoring (Camera + AI) in Background
+            try {
+                // Request Camera Access
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.getElementById('monitor-video');
+                video.srcObject = stream;
+
+                // Load Face AI models (from reliable GitHub mirror)
+                const MODEL_URL = 'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights';
+                await Promise.all([
+                    faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL)
+                ]);
+
+                console.log("AI Proctoring System Ready");
+                startAIMonitoring(video);
+                startBlackFrameDetection(video);
+            } catch (err) {
+                console.warn("Proctoring Warning:", err);
+                // We don't block the test if AI fails, but we log the incident
+                cheated = true; // Mark as suspicious if they block camera
+            }
+
+            // Tab Switch Detection
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) handleSuspiciousMove("TAB SWITCH DETECTED");
+            });
+            window.addEventListener("blur", () => handleSuspiciousMove("TAB SWITCH DETECTED"));
+        }
+
+        async function startAIMonitoring(video) {
+            setInterval(async () => {
+                const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks();
+                
+                if (detections.length === 0) {
+                    handleSuspiciousMove("FACE MISSING: Please stay in front of the camera.");
+                } else if (detections.length > 1) {
+                    handleSuspiciousMove("MULTIPLE PERSONS DETECTED: Only one person allowed.");
+                } else {
+                    // Check if looking away (Basic Head Pose Estimation)
+                    const landmarks = detections[0].landmarks;
+                    const nose = landmarks.getNose();
+                    const jaw = landmarks.getJawOutline();
+                    
+                    // Simple logic: if nose is too far from jaw center, head is turned
+                    const jawMidX = (jaw[0].x + jaw[16].x) / 2;
+                    const noseX = nose[0].x;
+                    const diff = Math.abs(noseX - jawMidX);
+
+                    if (diff > 25) { // Threshold for turning head
+                        handleSuspiciousMove("LOOKING AWAY: Please focus on the screen.");
+                    }
+                }
+            }, 2000); // Check every 2 seconds
+        }
+
+        function startBlackFrameDetection(video) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 160;
+            canvas.height = 120;
+
+            setInterval(() => {
+                if (video.paused || video.ended) return;
+                
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                let brightness = 0;
+                for (let i = 0; i < data.length; i += 4) {
+                    brightness += (data[i] + data[i+1] + data[i+2]) / 3;
+                }
+                
+                const avgBrightness = brightness / (data.length / 4);
+                
+                // If average brightness is very low (e.g., < 10 out of 255), the shutter is likely closed
+                if (avgBrightness < 10) {
+                    handleSuspiciousMove("CAMERA BLOCKED: Please open your camera shutter.");
+                }
+            }, 3000); // Check every 3 seconds
+        }
+
+        function handleSuspiciousMove(message = "TAB SWITCH DETECTED") {
+            suspiciousActivity = true;
+            cheated = true;
+            const warningScreen = document.getElementById('warning-screen');
+            warningScreen.querySelector('h2').textContent = message;
+            warningScreen.style.display = 'flex';
+        }
+
+        function resumeTest() {
+            document.getElementById('warning-screen').style.display = 'none';
+        }
+
+        // Create all question nodes once, then toggle visibility
+        function renderQuestionsNodes() {
+            container.innerHTML = '';
+            questionsData.forEach((q, index) => {
+                const block = document.createElement('div');
+                block.className = `question-block q-idx-${index}`;
+                block.innerHTML = `
+                    <div class="q-text">Q${index + 1}: ${q.question}</div>
+                    <div class="options-list">
+                        ${q.options.map((opt, i) => `
+                            <div class="option-item" onclick="selectOption(this, 'q${index}')">
+                                <div class="radio-circle"></div>
+                                <div class="opt-text">${opt}</div>
+                                <input type="radio" name="q${index}" value="${opt}" style="display:none">
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(block);
+            });
+        }
+
+        function updateQuizView() {
+            // Show/Hide question blocks
+            document.querySelectorAll('.question-block').forEach((b, idx) => {
+                b.classList.toggle('active', idx === currentIdx);
+            });
+
+            // Update Counter
+            progressText.textContent = `Question ${currentIdx + 1} of ${questionsData.length}`;
+
+            // Handle Buttons
+            prevBtn.classList.toggle('hidden', currentIdx === 0);
+            
+            if (currentIdx === questionsData.length - 1) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+            
+            lucide.createIcons();
+        }
+
+        function goToNext() {
+            if (currentIdx < questionsData.length - 1) {
+                currentIdx++;
+                updateQuizView();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function goToPrev() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                updateQuizView();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function selectOption(element, group) {
+            const groupOptions = element.parentElement.querySelectorAll('.option-item');
+            groupOptions.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            element.querySelector('input').checked = true;
+        }
+
+        function handleSubmit() {
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        function closeConfirm() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+
+        async function processSubmit() {
+            const emailInput = document.getElementById('candidate-email-input');
+            const email = emailInput.value.trim();
+            if (!email) {
+                alert("Please enter your email to submit.");
+                return;
+            }
+
+            let score = 0;
+            questionsData.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected && selected.value === q.answer) {
+                    score++;
+                }
+            });
+
+            try {
+                document.getElementById('confirm-modal').classList.add('hidden');
+                
+                const response = await fetch('http://127.0.0.1:8002/submit-assessment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        token: token,
+                        email: email,
+                        score: score,
+                        total: questionsData.length,
+                        suspicious: cheated ? "Unwanted Move" : "Normal"
+                    })
+                });
+
+                if (response.ok) {
+                    console.log("Submission result: OK");
+                    document.getElementById('test-view').classList.add('hidden');
+                    document.getElementById('success-view').classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const errorText = await response.text();
+                    console.error("Submission failed:", errorText);
+                    alert("Submission failed. Status: " + response.status);
+                }
+            } catch (error) {
+                console.error("Network error during submission:", error);
+                alert("Error submitting assessment. Check console for details.");
+            }
+        }
+
+        initTest();
+    </script>
+    <div id="confirm-modal" class="modal-overlay hidden">
+        <div class="modal-content glass animate-slide-up mini-modal">
+            <div class="modal-header">
+                <h3>Submit Assessment</h3>
+                <button class="close-modal" onclick="closeConfirm()"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>Please confirm your email address to submit your answers:</p>
+                <div class="input-group" style="margin-top: 15px;">
+                    <input type="email" id="candidate-email-input" placeholder="Enter your email" class="glass-inset" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; color: #333; background: white;">
+                </div>
+            </div>
+            <div class="modal-footer" style="padding-top: 10px;">
+                <button class="glass-btn sm" onclick="closeConfirm()">Cancel</button>
+                <button class="primary-btn sm" onclick="processSubmit()">
+                    <span>Confirm & Submit</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
