@@ -1,48 +1,89 @@
 document.addEventListener('DOMContentLoaded', () => {
+    initializeElements();
     lucide.createIcons();
     setupEventListeners();
 });
 
+// --- Constants ---
+const NEON_INNER_HTML = `
+    <div class="neon-checkbox__frame">
+        <div class="neon-checkbox__box">
+            <div class="neon-checkbox__check-container">
+                <svg viewBox="0 0 24 24" class="neon-checkbox__check">
+                    <path d="M3,12.5l7,7L21,5"></path>
+                </svg>
+            </div>
+            <div class="neon-checkbox__glow"></div>
+            <div class="neon-checkbox__borders">
+                <span></span><span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="neon-checkbox__effects">
+            <div class="neon-checkbox__particles">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="neon-checkbox__rings">
+                <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+            </div>
+            <div class="neon-checkbox__sparks">
+                <span></span><span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+`;
+
 // --- State Management ---
-let allQuestions = [];
-let selectedQuestions = new Set();
+let allMcqs = [];
+let allCodingQuestions = [];
+let selectedMcqs = new Set();
+let selectedCoding = new Set();
 
 // --- Elements ---
-const generateBtn = document.getElementById('generate-aptitude-btn');
-const jdInput = document.getElementById('jd-input');
-const fileInput = document.getElementById('file-upload');
-const fileNameDisplay = document.getElementById('file-name');
-const loader = document.getElementById('loader');
-
-const selectionSection = document.getElementById('selection-section');
-const questionsList = document.getElementById('questions-list');
-const selectedCount = document.getElementById('selected-count');
-const selectAllCheckbox = document.getElementById('select-all-checkbox');
-const doneBtn = document.getElementById('done-btn');
-
-const finalResultSection = document.getElementById('final-result-section');
-const finalAptitudeList = document.getElementById('final-aptitude-list');
-const copyBtn = document.getElementById('copy-btn');
-const downloadPdfBtn = document.getElementById('download-pdf-btn');
-const emailBtn = document.getElementById('email-btn');
-
-// Modal Elements
-const emailModal = document.getElementById('email-modal');
-const closeEmailModal = document.getElementById('close-email-modal');
-const cancelEmailBtn = document.getElementById('cancel-email');
-const confirmSendEmailBtn = document.getElementById('confirm-send-email');
-const receiverEmailsInput = document.getElementById('receiver-emails');
-
-// Analysis Elements
-const viewAnalysisBtn = document.getElementById('view-analysis-btn');
-const analysisDashboard = document.getElementById('analysis-dashboard-section');
-const mainGeneratorCard = document.querySelector('.generator-layout .main-card:first-child');
-const jobRolesView = document.getElementById('job-roles-view');
-const candidateDetailsView = document.getElementById('candidate-details-view');
-const detailJobTitleText = document.getElementById('detail-job-title');
-const candidatesTbody = document.getElementById('candidates-tbody');
+let generateBtn, jdInput, fileInput, fileNameDisplay, loader;
+let selectionSection, questionsList, selectedCount, selectAllCheckbox, doneBtn;
+let finalResultSection, finalAptitudeList, finalCodingList, codingQuestionsList, selectAllCoding;
+let copyBtn, downloadPdfBtn, emailBtn;
+let emailModal, closeEmailModal, cancelEmailBtn, confirmSendEmailBtn, receiverEmailsInput;
+let viewAnalysisBtn, analysisDashboard, mainGeneratorCard, jobRolesView, candidateDetailsView, detailJobTitleText, candidatesTbody;
 
 // --- Setup ---
+function initializeElements() {
+    generateBtn = document.getElementById('generate-aptitude-btn');
+    jdInput = document.getElementById('jd-input');
+    fileInput = document.getElementById('file-upload');
+    fileNameDisplay = document.getElementById('file-name');
+    loader = document.getElementById('loader');
+
+    selectionSection = document.getElementById('selection-section');
+    questionsList = document.getElementById('questions-list');
+    selectedCount = document.getElementById('selected-count');
+    selectAllCheckbox = document.getElementById('select-all-checkbox');
+    doneBtn = document.getElementById('done-btn');
+
+    finalResultSection = document.getElementById('final-result-section');
+    finalAptitudeList = document.getElementById('final-aptitude-list');
+    finalCodingList = document.getElementById('final-coding-list');
+    codingQuestionsList = document.getElementById('coding-questions-list');
+    selectAllCoding = document.getElementById('select-all-coding');
+    copyBtn = document.getElementById('copy-btn');
+    downloadPdfBtn = document.getElementById('download-pdf-btn');
+    emailBtn = document.getElementById('email-btn');
+
+    emailModal = document.getElementById('email-modal');
+    closeEmailModal = document.getElementById('close-email-modal');
+    cancelEmailBtn = document.getElementById('cancel-email');
+    confirmSendEmailBtn = document.getElementById('confirm-send-email');
+    receiverEmailsInput = document.getElementById('receiver-emails');
+
+    viewAnalysisBtn = document.getElementById('view-analysis-btn');
+    analysisDashboard = document.getElementById('analysis-dashboard-section');
+    mainGeneratorCard = document.querySelector('.generator-layout .main-card:first-child');
+    jobRolesView = document.getElementById('job-roles-view');
+    candidateDetailsView = document.getElementById('candidate-details-view');
+    detailJobTitleText = document.getElementById('detail-job-title');
+    candidatesTbody = document.getElementById('candidates-tbody');
+}
+
 function setupEventListeners() {
     // File Upload handling
     fileInput.addEventListener('change', (e) => {
@@ -77,28 +118,55 @@ function setupEventListeners() {
             if (!response.ok) throw new Error("Failed to generate questions");
 
             const data = await response.json();
-            allQuestions = data.questions;
+            console.log("DEBUG: Received Data:", data);
+            allMcqs = data.mcqs || [];
+            allCodingQuestions = data.coding_questions || [];
             
-            renderQuestionsToSelect();
+            renderMcqsToSelect();
+            renderCodingToSelect();
+
             showLoader(false);
             showSection(selectionSection);
             selectionSection.scrollIntoView({ behavior: 'smooth' });
         } catch (error) {
-            console.error(error);
-            alert("Error connecting to backend AI. Please ensure the backend server is running on port 8002.");
+            console.error("GENERATION ERROR:", error);
+            alert(`Error: ${error.message}\n\nPlease ensure the backend is running on port 8002 and your network allows the connection.`);
             showLoader(false);
         }
     });
 
+    // Selection Tabs Logic
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.dataset.tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(tab === 'mcqs' ? 'mcq-selection-view' : 'coding-selection-view').classList.remove('hidden');
+        });
+    });
+
     // Step 2: Confirmation
     doneBtn.addEventListener('click', () => {
-        if (selectedQuestions.size === 0) {
-            alert("Please select at least one question.");
+        if (selectedMcqs.size === 0 && selectedCoding.size === 0) {
+            alert("Please select at least one question (MCQ or Coding).");
             return;
         }
-        renderFinalList();
+        renderFinalLists();
         showSection(finalResultSection);
         finalResultSection.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Output Tabs Logic
+    document.querySelectorAll('.out-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const t = btn.dataset.outTab;
+            document.querySelectorAll('.out-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.out-tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(t).classList.remove('hidden');
+        });
     });
 
     // Final: Actions
@@ -150,9 +218,11 @@ function setupEventListeners() {
                 body: JSON.stringify({
                     emails: emailsArray,
                     job_title: jobTitle,
-                    questions_count: selectedQuestions.size,
+                    mcq_count: selectedMcqs.size,
+                    coding_count: selectedCoding.size,
                     assessment_link: assessmentLink,
-                    questions: Array.from(selectedQuestions)
+                    mcqs: Array.from(selectedMcqs),
+                    coding_questions: Array.from(selectedCoding)
                 })
             });
 
@@ -177,20 +247,18 @@ function setupEventListeners() {
     // Analysis Events
     viewAnalysisBtn.addEventListener('click', showAnalysisDashboard);
 
-    // Select All Toggle
+    // Select All Toggle (MCQs)
     selectAllCheckbox.addEventListener('change', () => {
         const isChecked = selectAllCheckbox.checked;
         const items = questionsList.querySelectorAll('.question-item');
-        
-        selectedQuestions.clear();
+        selectedMcqs.clear();
         items.forEach((item, index) => {
-            const qObj = allQuestions[index];
+            const qObj = allMcqs[index];
             const checkbox = item.querySelector('.q-real-checkbox');
-            
             if (isChecked) {
                 item.classList.add('selected');
                 checkbox.checked = true;
-                selectedQuestions.add(qObj);
+                selectedMcqs.add(qObj);
             } else {
                 item.classList.remove('selected');
                 checkbox.checked = false;
@@ -198,77 +266,51 @@ function setupEventListeners() {
         });
         updateCount();
     });
+
+    // Select All Toggle (Coding)
+    if (selectAllCoding) {
+        selectAllCoding.addEventListener('change', () => {
+            const isChecked = selectAllCoding.checked;
+            const items = codingQuestionsList.querySelectorAll('.question-item');
+            selectedCoding.clear();
+            items.forEach((item, index) => {
+                const cObj = allCodingQuestions[index];
+                const checkbox = item.querySelector('.c-real-checkbox');
+                if (isChecked) {
+                    item.classList.add('selected');
+                    checkbox.checked = true;
+                    selectedCoding.add(cObj);
+                } else {
+                    item.classList.remove('selected');
+                    checkbox.checked = false;
+                }
+            });
+            updateCount();
+        });
+    }
 }
 
 // --- Logic Functions ---
 
-function generateMockQuestions() {
-    // In a real scenario, this data would come from the backend AI
-    allQuestions = [
-        "Explain the difference between synchronous and asynchronous programming in Python.",
-        "How do you handle state management in a large-scale React application?",
-        "Describe the CAP theorem and its implications for distributed databases.",
-        "What are the primary differences between REST and GraphQL APIs?",
-        "How would you optimize a slow-running SQL query?",
-        "Explain the concept of 'Dependency Injection' and why it is useful.",
-        "What is the role of a JWT in authentication, and how does it work?",
-        "Describe the microservices architecture and one of its main drawbacks.",
-        "How do you ensure data security while building a public-facing API?",
-        "Explain the lifecycle of a request in a typical web framework."
-    ];
-
-    renderQuestionsToSelect();
-}
-
-const NEON_INNER_HTML = `
-    <div class="neon-checkbox__frame">
-        <div class="neon-checkbox__box">
-            <div class="neon-checkbox__check-container">
-                <svg viewBox="0 0 24 24" class="neon-checkbox__check">
-                    <path d="M3,12.5l7,7L21,5"></path>
-                </svg>
-            </div>
-            <div class="neon-checkbox__glow"></div>
-            <div class="neon-checkbox__borders">
-                <span></span><span></span><span></span><span></span>
-            </div>
-        </div>
-        <div class="neon-checkbox__effects">
-            <div class="neon-checkbox__particles">
-                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-            </div>
-            <div class="neon-checkbox__rings">
-                <div class="ring"></div><div class="ring"></div><div class="ring"></div>
-            </div>
-            <div class="neon-checkbox__sparks">
-                <span></span><span></span><span></span><span></span>
-            </div>
-        </div>
-    </div>
-`;
-
-function renderQuestionsToSelect() {
+function renderMcqsToSelect() {
     questionsList.innerHTML = '';
-    selectedQuestions.clear();
+    selectedMcqs.clear();
     selectAllCheckbox.checked = false;
     updateCount();
 
-    allQuestions.forEach((qObj, index) => {
+    allMcqs.forEach((qObj, index) => {
         const item = document.createElement('div');
         item.className = 'question-item';
         
-        const questionText = typeof qObj === 'string' ? qObj : qObj.question;
+        const questionText = qObj.question;
         const options = qObj.options || [];
         const qId = qObj.id || `Q${index + 1}`;
 
-        let optionsHtml = '';
-        if (options.length > 0) {
-            optionsHtml = `
-                <div class="options-grid">
-                    ${options.map((opt, i) => `<div class="option-box"><span>${String.fromCharCode(65 + i)})</span> ${opt}</div>`).join('')}
-                </div>
-            `;
-        }
+        let optionsHtml = `
+            <div class="options-grid">
+                ${options.map((opt, i) => `<div class="option-box"><span>${String.fromCharCode(65 + i)})</span> ${opt}</div>`).join('')}
+            </div>
+        `;
 
         item.innerHTML = `
             <div class="q-checkbox-wrapper">
@@ -284,27 +326,24 @@ function renderQuestionsToSelect() {
         `;
 
         const checkbox = item.querySelector('.q-real-checkbox');
-
         item.addEventListener('click', (e) => {
-            // Prevent double toggle if clicking label/input directly
-            if (e.target.tagName === 'INPUT') return;
+            // If clicking the checkbox area itself, let the label/input handle it
+            if (e.target.closest('.neon-checkbox')) return;
             
             checkbox.checked = !checkbox.checked;
-            toggleQuestionSelection();
+            toggleMcqSelection();
         });
+        checkbox.addEventListener('change', toggleMcqSelection);
 
-        checkbox.addEventListener('change', toggleQuestionSelection);
-
-        function toggleQuestionSelection() {
+        function toggleMcqSelection() {
             if (checkbox.checked) {
                 item.classList.add('selected');
-                selectedQuestions.add(qObj);
+                selectedMcqs.add(qObj);
             } else {
                 item.classList.remove('selected');
-                selectedQuestions.delete(qObj);
+                selectedMcqs.delete(qObj);
             }
-            // Update Select All checkbox state
-            selectAllCheckbox.checked = selectedQuestions.size === allQuestions.length;
+            selectAllCheckbox.checked = (selectedMcqs.size === allMcqs.length);
             updateCount();
         }
 
@@ -313,36 +352,107 @@ function renderQuestionsToSelect() {
     lucide.createIcons();
 }
 
-function updateCount() {
-    selectedCount.textContent = selectedQuestions.size;
-}
+function renderCodingToSelect() {
+    codingQuestionsList.innerHTML = '';
+    selectedCoding.clear();
 
-function renderFinalList() {
-    finalAptitudeList.innerHTML = '';
-    let index = 1;
-    selectedQuestions.forEach(qObj => {
-        const questionText = typeof qObj === 'string' ? qObj : qObj.question;
-        const options = qObj.options || [];
-        const answer = qObj.answer || "";
-
-        const container = document.createElement('div');
-        container.className = 'final-q-card';
+    allCodingQuestions.forEach((cObj, index) => {
+        const item = document.createElement('div');
+        item.className = 'question-item';
         
-        let optionsHtml = '';
-        if (options.length > 0) {
-            optionsHtml = `
-                <div class="final-options-grid">
-                    ${options.map((opt, i) => `<div class="final-opt"><span>${String.fromCharCode(65 + i)})</span> ${opt}</div>`).join('')}
+        item.innerHTML = `
+            <div class="q-checkbox-wrapper">
+                <label class="neon-checkbox">
+                    <input type="checkbox" class="c-real-checkbox">
+                    ${NEON_INNER_HTML}
+                </label>
+            </div>
+            <div class="q-content">
+                <div class="q-id-text">${cObj.id || "C" + (index+1)}: ${String(cObj.title || cObj.name || cObj.problem_name || "Untitled Question")}</div>
+                <div class="q-desc">${String(cObj.description || cObj.problem || cObj.desc || cObj.problem_statement || "No description provided.")}</div>
+                ${(cObj.constraints || cObj.constraint) ? `<div class="q-constraints" style="font-size: 0.8rem; color: #ef4444; font-weight: 700; margin-top: 8px;">Constraints: ${String(cObj.constraints || cObj.constraint)}</div>` : ''}
+                <div class="code-example">
+                    <span class="example-label">Example Input</span>
+                    <pre style="white-space: pre-wrap;">${typeof (cObj.example_input || cObj.input) === 'object' ? JSON.stringify(cObj.example_input || cObj.input, null, 2) : String(cObj.example_input || cObj.input || "N/A")}</pre>
+                    <span class="example-label" style="margin-top:10px;">Example Output</span>
+                    <pre style="white-space: pre-wrap;">${typeof (cObj.example_output || cObj.output) === 'object' ? JSON.stringify(cObj.example_output || cObj.output, null, 2) : String(cObj.example_output || cObj.output || "N/A")}</pre>
                 </div>
-            `;
+            </div>
+        `;
+
+        const checkbox = item.querySelector('.c-real-checkbox');
+        item.addEventListener('click', (e) => {
+            // If clicking the checkbox area itself, let the label/input handle it
+            if (e.target.closest('.neon-checkbox')) return;
+            
+            checkbox.checked = !checkbox.checked;
+            toggleCodingSelection();
+        });
+        checkbox.addEventListener('change', toggleCodingSelection);
+
+        function toggleCodingSelection() {
+            if (checkbox.checked) {
+                item.classList.add('selected');
+                selectedCoding.add(cObj);
+            } else {
+                item.classList.remove('selected');
+                selectedCoding.delete(cObj);
+            }
+            // Update Select All checkbox state
+            selectAllCoding.checked = (selectedCoding.size === allCodingQuestions.length);
+            updateCount();
         }
 
+        codingQuestionsList.appendChild(item);
+    });
+    lucide.createIcons();
+}
+
+function updateCount() {
+    selectedCount.textContent = selectedMcqs.size + selectedCoding.size;
+}
+
+function renderFinalLists() {
+    finalAptitudeList.innerHTML = '';
+    finalCodingList.innerHTML = '';
+
+    // Render MCQs
+    Array.from(selectedMcqs).forEach((qObj, i) => {
+        const container = document.createElement('div');
+        container.className = 'final-q-card';
+        const optionsHtml = `
+            <div class="final-options-grid">
+                ${(qObj.options || []).map((opt, i) => `<div class="final-opt"><span>${String.fromCharCode(65 + i)})</span> ${opt}</div>`).join('')}
+            </div>
+        `;
         container.innerHTML = `
-            <div class="final-q-text"><strong>Q${index++}:</strong> ${questionText}</div>
+            <div class="final-q-text"><strong>Q${i+1}:</strong> ${qObj.question}</div>
             ${optionsHtml}
-            <div class="final-answer">Correct Answer: ${answer}</div>
+            <div class="final-answer">Correct Answer: ${qObj.answer}</div>
         `;
         finalAptitudeList.appendChild(container);
+    });
+
+    // Render Coding
+    Array.from(selectedCoding).forEach((cObj, i) => {
+        const container = document.createElement('div');
+        container.className = 'final-q-card';
+        const title = String(cObj.title || cObj.name || cObj.problem_name || "Untitled Question");
+        const desc = String(cObj.description || cObj.problem || cObj.desc || cObj.problem_statement || "No description provided.");
+        const constraints = String(cObj.constraints || cObj.constraint || "");
+        const input = typeof (cObj.example_input || cObj.input) === 'object' ? JSON.stringify(cObj.example_input || cObj.input, null, 2) : String(cObj.example_input || cObj.input || "N/A");
+        const output = typeof (cObj.example_output || cObj.output) === 'object' ? JSON.stringify(cObj.example_output || cObj.output, null, 2) : String(cObj.example_output || cObj.output || "N/A");
+
+        container.innerHTML = `
+            <div class="final-q-text"><strong>C${i+1}:</strong> ${title}</div>
+            <div class="q-desc">${desc}</div>
+            ${constraints ? `<div class="q-constraints" style="font-size: 0.85rem; color: #ef4444; font-weight: 700; margin-bottom: 10px;">Constraints: ${constraints}</div>` : ''}
+            <div class="code-example">
+                <span class="example-label">Example Input</span> <pre>${input}</pre>
+                <span class="example-label" style="margin-top:10px;">Example Output</span> <pre>${output}</pre>
+            </div>
+        `;
+        finalCodingList.appendChild(container);
     });
 }
 
@@ -356,14 +466,17 @@ function showSection(section) {
 }
 
 function copyToClipboard() {
-    const text = Array.from(selectedQuestions)
-        .map((qObj, i) => {
-            const q = typeof qObj === 'string' ? qObj : qObj.question;
-            const opts = (qObj.options || []).map((o, idx) => `${String.fromCharCode(65 + idx)}) ${o}`).join('\n');
-            const ans = qObj.answer ? `\nCorrect Answer: ${qObj.answer}` : "";
-            return `Q${i+1}: ${q}\n${opts}${ans}`;
-        })
-        .join('\n\n---\n\n');
+    let text = "--- MCQs ---\n\n";
+    Array.from(selectedMcqs).forEach((q, i) => {
+        text += `Q${i+1}: ${q.question}\nOptions: ${q.options.join(', ')}\nAnswer: ${q.answer}\n\n`;
+    });
+    
+    if (selectedCoding.size > 0) {
+        text += "\n--- Coding Questions ---\n\n";
+        Array.from(selectedCoding).forEach((c, i) => {
+            text += `C${i+1}: ${c.title}\nDescription: ${c.description}\nExample Input: ${c.example_input}\nExample Output: ${c.example_output}\n\n`;
+        });
+    }
     
     navigator.clipboard.writeText(text).then(() => {
         const originalText = copyBtn.innerHTML;
@@ -499,20 +612,24 @@ async function showAnalysisDashboard() {
             const pending = a.emails.length - attempted;
             const sentDate = formatProctoringDate(a.timestamp);
             
+            const mcqCount = a.mcqs ? a.mcqs.length : (a.questions ? a.questions.length : 0);
+            const codeCount = a.coding_questions ? a.coding_questions.length : 0;
+
             return `
                 <tr>
-                    <td onclick="viewCandidateDetails('${a.job_title}', '${a.token}')">${a.job_title}</td>
-                    <td onclick="viewCandidateDetails('${a.job_title}', '${a.token}')">${a.emails.length}</td>
-                    <td onclick="viewCandidateDetails('${a.job_title}', '${a.token}')">${attempted}</td>
-                    <td onclick="viewCandidateDetails('${a.job_title}', '${a.token}')">${pending}</td>
-                    <td onclick="viewCandidateDetails('${a.job_title}', '${a.token}')">${sentDate}</td>
-                    <td>
-                        <div class="actions-cell">
-                            <button class="glass-btn sm" onclick="viewCandidateDetails('${a.job_title}', '${a.token}')">View Details</button>
-                            <button class="delete-btn" onclick="event.stopPropagation(); deleteAssessment('${a.token}')" title="Delete Assessment">
-                                <i data-lucide="trash-2"></i>
-                            </button>
-                        </div>
+                    <td onclick="viewCandidateDetails('${a.job_title}', '${a.token}')">
+                        <div style="font-weight: 700;">${a.job_title}</div>
+                        <div style="font-size: 0.7rem; color: #94a3b8;">${mcqCount} MCQ | ${codeCount} Code</div>
+                    </td>
+                    <td><span class="status-badge status-sent">Sent</span></td>
+                    <td>${a.emails.length}</td>
+                    <td>${attempted}</td>
+                    <td>${new Date(a.timestamp * 1000).toLocaleDateString()}</td>
+                    <td class="actions-cell">
+                        <button class="glass-btn sm" onclick="viewCandidateDetails('${a.job_title}', '${a.token}')">View Details</button>
+                        <button class="delete-btn" onclick="event.stopPropagation(); deleteAssessment('${a.token}')" title="Delete Assessment">
+                            <i data-lucide="trash-2"></i>
+                        </button>
                     </td>
                 </tr>
             `;
@@ -547,11 +664,15 @@ window.hideAnalysis = function() {
     mainGeneratorCard.classList.remove('hidden');
 }
 
+const candidateList = document.getElementById('candidate-submissions-list');
+
 window.viewCandidateDetails = async function(jobTitle, token) {
     detailJobTitleText.textContent = jobTitle;
     jobRolesView.classList.add('hidden');
     candidateDetailsView.classList.remove('hidden');
     
+    candidateList.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Loading candidates...</td></tr>';
+
     try {
         const response = await fetch('http://127.0.0.1:8002/get-analytics');
         const db = await response.json();
@@ -559,30 +680,36 @@ window.viewCandidateDetails = async function(jobTitle, token) {
         const assessment = db.assessments.find(a => a.token === token);
         const submissions = db.submissions.filter(s => s.token === token);
 
-        candidatesTbody.innerHTML = assessment.emails.map(email => {
+        if (!assessment) return;
+
+        candidateList.innerHTML = assessment.emails.map(email => {
             const sub = submissions.find(s => s.email === email);
-            let status = sub ? 'Attempted' : 'Pending';
-            let statusClass = status.toLowerCase();
             
-            if (sub && sub.suspicious === "Unwanted Move") {
-                status = "Unwanted Move";
-                statusClass = "rejected"; 
+            let status = sub ? 'Attempted' : 'Pending';
+            let statusClass = sub ? 'status-attempted' : 'status-pending';
+            
+            if (sub && sub.suspicious !== "Normal") {
+                status = "Flagged";
+                statusClass = "status-sent"; // reuse style or add flagged
             }
 
-            const score = sub ? `${sub.score}/${sub.total}` : '-';
-            const date = sub ? formatProctoringDate(sub.timestamp) : '-';
+            const mcqScore = sub ? (sub.mcq_score !== undefined ? `${sub.mcq_score}/${sub.mcq_total}` : `${sub.score}/${sub.total}`) : '-';
+            const codingScore = sub ? (sub.coding_score !== undefined ? `${sub.coding_score}/${sub.coding_total}` : '-') : '-';
+            const date = sub ? new Date(sub.timestamp * 1000).toLocaleDateString() : '-';
             
             return `
                 <tr>
                     <td>${email}</td>
-                    <td><span class="status-tag ${statusClass}">${status}</span></td>
-                    <td>${score}</td>
+                    <td style="font-weight:700; color:var(--primary);">${mcqScore}</td>
+                    <td style="font-weight:700; color:#10b981;">${codingScore}</td>
+                    <td><span class="status-badge ${statusClass}">${status}</span></td>
                     <td>${date}</td>
                 </tr>
             `;
         }).join('');
     } catch (error) {
         console.error("Failed to fetch candidate details:", error);
+        candidateList.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Error loading details.</td></tr>';
     }
     lucide.createIcons();
 }

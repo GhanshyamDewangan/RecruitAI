@@ -2,7 +2,7 @@
     --primary: hsl(245, 100%, 65%);
     --primary-dark: hsl(245, 100%, 55%);
     --secondary: hsl(190, 100%, 45%);
-    --accent: hsl(30, 100%, 50%);
+    --accent: hsl(280, 100%, 70%);
     --success: hsl(150, 80%, 45%);
     --danger: hsl(0, 80%, 60%);
     
@@ -71,7 +71,26 @@ body {
     transform: translateX(-50%);
 }
 .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.5rem; color: var(--primary); }
-.logo-text { background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.logo-text { 
+    background: linear-gradient(
+        135deg, 
+        var(--primary), 
+        var(--secondary), 
+        var(--accent), 
+        var(--primary)
+    );
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: liveGradient 5s linear infinite;
+}
+
+@keyframes liveGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
 .workflow-stepper { display: flex; gap: 30px; }
 .step { font-size: 0.95rem; font-weight: 600; color: var(--text-muted); padding: 10px 5px; cursor: pointer; text-decoration: none; position: relative; opacity: 0.6; transition: all 0.3s; }
@@ -311,3 +330,20 @@ select {
 .animate-slide-up { animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .animate-fade-in { animation: fadeIn 0.8s ease-out; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+/* Footer */
+.site-footer {
+    padding: 30px 0;
+    text-align: center;
+    width: 100%;
+    margin-top: 40px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.site-footer strong {
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}

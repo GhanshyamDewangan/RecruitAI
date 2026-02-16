@@ -113,13 +113,58 @@
                     </div>
                 </div>
 
-                <div id="questions-list" class="questions-container">
-                    <!-- Questions will be injected here with checkboxes -->
+                <div class="selection-tabs">
+                    <button class="tab-btn active" data-tab="mcqs">MCQs (25)</button>
+                    <button class="tab-btn" data-tab="coding">Coding Questions (4)</button>
+                </div>
+
+                <div id="mcq-selection-view" class="tab-content">
+                    <div id="questions-list" class="questions-container">
+                        <!-- MCQs injected here -->
+                    </div>
+                </div>
+
+                <div id="coding-selection-view" class="tab-content hidden">
+                    <div class="section-header" style="margin-top: 10px; border-bottom: none;">
+                        <div class="select-all-container">
+                            <label class="neon-checkbox">
+                                <input type="checkbox" id="select-all-coding">
+                                <div class="neon-checkbox__frame">
+                                    <div class="neon-checkbox__box">
+                                        <div class="neon-checkbox__check-container">
+                                            <svg viewBox="0 0 24 24" class="neon-checkbox__check">
+                                                <path d="M3,12.5l7,7L21,5"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="neon-checkbox__glow"></div>
+                                        <div class="neon-checkbox__borders">
+                                            <span></span><span></span><span></span><span></span>
+                                        </div>
+                                    </div>
+                                    <div class="neon-checkbox__effects">
+                                        <div class="neon-checkbox__particles">
+                                            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                                        </div>
+                                        <div class="neon-checkbox__rings">
+                                            <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+                                        </div>
+                                        <div class="neon-checkbox__sparks">
+                                            <span></span><span></span><span></span><span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <span class="select-all-text" onclick="document.getElementById('select-all-coding').click()">Select All Coding</span>
+                        </div>
+                    </div>
+                    <div id="coding-questions-list" class="questions-container">
+                        <!-- Coding questions injected here -->
+                    </div>
                 </div>
 
                 <div class="action-footer">
                     <button id="done-btn" class="secondary-btn-large">
-                        <span>Confirm Selection</span>
+                        <span>Confirm Assessment Set</span>
                         <i data-lucide="check-circle"></i>
                     </button>
                 </div>
@@ -127,9 +172,8 @@
 
             <!-- Final Result Section (Hidden by default) -->
             <section id="final-result-section" class="main-card glass hidden animate-slide-up">
-                <!-- Content remains the same -->
                 <div class="result-header">
-                    <h3 class="section-title">Final Question Set</h3>
+                    <h3 class="section-title">Final Assessment Pack</h3>
                     <div class="result-actions">
                         <button id="copy-btn" class="glass-btn action-item">
                             <i data-lucide="copy"></i> Copy
@@ -138,12 +182,19 @@
                             <i data-lucide="file-text"></i> Download PDF
                         </button>
                         <button id="email-btn" class="glass-btn action-item primary-glass-btn">
-                            <i data-lucide="mail"></i> Send via Email
+                            <i data-lucide="mail"></i> Send to Candidates
                         </button>
                     </div>
                 </div>
-                <div id="final-aptitude-list" class="aptitude-content">
-                    <!-- Selected questions list -->
+                <div class="output-tabs">
+                    <button class="out-tab-btn active" data-out-tab="mcq-out">MCQs</button>
+                    <button class="out-tab-btn" data-out-tab="coding-out">Coding</button>
+                </div>
+                <div id="mcq-out" class="out-tab-content">
+                    <div id="final-aptitude-list" class="aptitude-content"></div>
+                </div>
+                <div id="coding-out" class="out-tab-content hidden">
+                    <div id="final-coding-list" class="aptitude-content"></div>
                 </div>
             </section>
 
@@ -196,17 +247,18 @@
                     </div>
                     <div class="analysis-table-container">
                         <table class="modern-table">
-                            <thead>
-                                <tr>
-                                    <th>Candidate Email</th>
-                                    <th>Status</th>
-                                    <th>Score</th>
-                                    <th>Sent Date</th>
-                                </tr>
-                            </thead>
-                            <tbody id="candidates-tbody">
-                                <!-- Detailed candidates rows -->
-                            </tbody>
+                                    <thead>
+                                        <tr>
+                                            <th>Email</th>
+                                            <th>MCQ Score</th>
+                                            <th>Coding Score</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="candidate-submissions-list">
+                                        <!-- Candidate data will be injected here -->
+                                    </tbody>
                         </table>
                     </div>
                 </div>
@@ -282,6 +334,9 @@
             </div>
         </div>
     </main>
+    <footer class="site-footer">
+        <p>Powered by <strong>Botivate</strong></p>
+    </footer>
 
     <script src="script.js"></script>
 </body>

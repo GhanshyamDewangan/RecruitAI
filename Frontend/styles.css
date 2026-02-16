@@ -3,7 +3,7 @@
     --primary: hsl(245, 100%, 65%);
     --primary-dark: hsl(245, 100%, 55%);
     --secondary: hsl(190, 100%, 45%);
-    --accent: hsl(30, 100%, 50%);
+    --accent: hsl(280, 100%, 70%);
     --success: hsl(150, 80%, 45%);
     --danger: hsl(0, 80%, 60%);
     --warning: hsl(45, 90%, 55%);
@@ -131,10 +131,24 @@ body {
 }
 
 .logo-text {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    background: linear-gradient(
+        135deg, 
+        var(--primary), 
+        var(--secondary), 
+        var(--accent), 
+        var(--primary)
+    );
+    background-size: 300% auto;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    animation: liveGradient 5s linear infinite;
+}
+
+@keyframes liveGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 /* Workflow Stepper */
@@ -866,4 +880,21 @@ textarea::placeholder {
     .analysis-table-container { overflow-x: auto; }
     .modern-table th, .modern-table td { padding: 12px 10px; font-size: 0.8rem; }
     .score-pill { width: 40px; height: 40px; font-size: 0.8rem; }
+}
+/* Footer */
+.site-footer {
+    padding: 30px 0;
+    text-align: center;
+    width: 100%;
+    margin-top: 40px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.site-footer strong {
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }

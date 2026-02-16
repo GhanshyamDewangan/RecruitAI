@@ -11,29 +11,42 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def generate_aptitude_questions(jd_text: str):
     """
-    Analyzes the Job Description and generates 25 relevant MCQ questions.
+    Analyzes the Job Description and generates 25 MCQ questions and 4 Coding questions.
     """
     
     prompt = f"""
-    You are an expert technical interviewer and recruitment specialist.
-    Analyze the following Job Description (JD) and generate 25 high-quality Multiple Choice Questions (MCQs).
+    Create a recruitment assessment JSON for the following Job Description.
     
-    Guidelines:
-    1. The questions must be directly relevant to the skills, experience level, and responsibilities mentioned in the JD.
-    2. Include a mix of:
-       - Technical/Domain Knowledge (Primary focus)
-       - Logical Reasoning/Problem Solving
-       - Role-specific situational questions
-    3. For each question, provide 4 options and clearly indicate the correct answer.
-    4. Ensure the difficulty level matches the seniority level mentioned in the JD.
-    5. CRITICAL: DO NOT mention any specific company names, organization names, or internal team names in the questions. The questions should be general technical/professional questions suitable for any assessment.
-    
-    Format: Return ONLY a JSON object with a key "questions" containing a list of objects.
-    Each object in the "questions" list must have:
-    - "id": (e.g., "Q1")
-    - "question": "The question text"
-    - "options": ["Option A", "Option B", "Option C", "Option D"]
-    - "answer": "The correct option text"
+    REQUIRED JSON STRUCTURE:
+    {{
+      "mcqs": [
+        {{
+          "id": "Q1",
+          "question": "text",
+          "options": ["A", "B", "C", "D"],
+          "answer": "correct option text"
+        }}
+      ],
+      "coding_questions": [
+        {{
+          "title": "Title of DSA Problem",
+          "description": "Clear problem statement and requirements",
+          "constraints": "Complexity and input limits",
+          "example_input": "sample input string",
+          "example_output": "sample output string",
+          "test_cases": [
+            {{"input": "in1", "output": "out1"}},
+            {{"input": "in2", "output": "out2"}}
+          ]
+        }}
+      ]
+    }}
+
+    RULES:
+    1. Generate 25 MCQs.
+    2. If the JD is technical (CS/IT), generate 4 Coding Questions. Otherwise, "coding_questions" must be [].
+    3. Coding questions must be role-agnostic DSA (MNC style).
+    4. OUTPUT ONLY THE JSON. NO EXPLANATION.
 
     JOB DESCRIPTION:
     {jd_text}
@@ -45,31 +58,27 @@ def generate_aptitude_questions(jd_text: str):
         completion = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
-                {"role": "system", "content": "You are a professional hiring assessment creator. Output only valid JSON lists."},
+                {"role": "system", "content": "You are a JSON-only generator. You honeslty follow the requested schema and never omit fields."},
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.7,
+            temperature=0.0,
             max_tokens=4000,
             response_format={ "type": "json_object" }
         )
         
         print(f"Step 2: Receiving AI response and parsing JSON...")
-        # Parse result
         response_content = completion.choices[0].message.content
         data = json.loads(response_content)
         
-        # Flexible parsing in case AI wraps it in a key
-        final_questions = []
-        if isinstance(data, list):
-            final_questions = data
-        elif isinstance(data, dict):
-            for key in data:
-                if isinstance(data[key], list):
-                    final_questions = data[key]
-                    break
+        # Log keys for verification
+        if data.get("coding_questions") and len(data["coding_questions"]) > 0:
+            print(f"DEBUG: Coding Question Keys: {list(data['coding_questions'][0].keys())}")
         
-        print(f"✅ SUCCESS: Generated {len(final_questions)} professional questions.")
-        return final_questions
+        mcqs = data.get("mcqs", [])
+        coding = data.get("coding_questions", [])
+        
+        print(f"✅ SUCCESS: Generated {len(mcqs)} professional MCQs and {len(coding)} Coding questions.")
+        return {"mcqs": mcqs, "coding_questions": coding}
 
     except Exception as e:
         print(f"❌ AGENT ERROR: {e}")

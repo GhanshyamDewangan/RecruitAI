@@ -2,7 +2,7 @@
     --primary: hsl(245, 100%, 65%);
     --primary-dark: hsl(245, 100%, 55%);
     --secondary: hsl(190, 100%, 45%);
-    --accent: hsl(30, 100%, 50%);
+    --accent: hsl(280, 100%, 70%);
     --success: hsl(150, 80%, 45%);
     
     --bg-light: hsl(220, 40%, 98%);
@@ -41,8 +41,27 @@ body {
     border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 .nav-container { display: flex; justify-content: space-between; align-items: center; width: 100%; position: relative; }
-.logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.5rem; }
-.logo-text { background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.5rem; color: var(--primary); }
+.logo-text { 
+    background: linear-gradient(
+        135deg, 
+        var(--primary), 
+        var(--secondary), 
+        var(--accent), 
+        var(--primary)
+    );
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: liveGradient 5s linear infinite;
+}
+
+@keyframes liveGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
 .nav-links {
     position: absolute;
@@ -59,9 +78,28 @@ body {
 /* Content Section */
 .content-wrapper { padding-top: 120px; padding-bottom: 60px; width: 95%; max-width: var(--container-max); margin: 0 auto; }
 .hero-section { text-align: center; margin-bottom: 50px; }
-.hero-section h1 { font-size: 3rem; font-weight: 800; margin-bottom: 15px; }
+.hero-section h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; }
 .gradient-text { background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.subtitle { color: var(--text-muted); font-size: 1.1rem; }
+.hero-section .subtitle {
+    font-size: 1rem;
+    color: var(--text-main);
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up { animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.animate-fade-in { animation: fadeIn 1s ease-out; }
 
 /* Cards */
 .main-card {
@@ -138,6 +176,15 @@ textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 
 }
 .option-box span { font-weight: 800; color: var(--primary); margin-right: 5px; }
 .question-item.selected .option-box { background: white; border-color: rgba(124,58,237,0.1); }
+
+/* Tabs */
+.selection-tabs, .output-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
+.tab-btn, .out-tab-btn { background: none; border: none; padding: 10px 20px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: 0.3s; }
+.tab-btn.active, .out-tab-btn.active { background: var(--primary); color: white; }
+
+.q-desc { font-size: 0.95rem; color: var(--text-muted); margin-top: 10px; line-height: 1.5; }
+.code-example { background: rgba(0,0,0,0.03); padding: 12px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; margin-top: 10px; border-left: 3px solid var(--primary); }
+.example-label { display: block; font-weight: 800; color: var(--primary); font-size: 0.7rem; text-transform: uppercase; margin-bottom: 5px; }
 
 /* Result Style */
 .aptitude-content {
@@ -543,3 +590,20 @@ textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 
 /* Override old checkbox style */
 .q-checkbox-wrapper { display: flex; align-items: flex-start; }
 .q-checkbox { display: none; } /* Hide the old placeholder */
+/* Footer */
+.site-footer {
+    padding: 30px 0;
+    text-align: center;
+    width: 100%;
+    margin-top: 40px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.site-footer strong {
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
